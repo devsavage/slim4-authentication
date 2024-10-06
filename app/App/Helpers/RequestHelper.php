@@ -22,24 +22,22 @@
  * SOFTWARE.
  */
 
-namespace App\Http\Controllers\Auth;
+namespace App\Helpers;
 
-use App\Helpers\RequestHelper;
-use App\Http\Controllers\Controller;
-use Psr\Http\Message\RequestInterface as Request;
-use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface;
 
-class RegisterController extends Controller
+class RequestHelper
 {
-    public function index(Response $response): Response {
-        return $this->render($response, "auth/register");
-    }
+    public static function param(ServerRequestInterface $request, $name, $queryParamsOnly = false)
+    {
+        if($request->getMethod() == "GET" && $request->getQueryParams() || $queryParamsOnly) {
+            return array_key_exists($name, $request->getQueryParams()) ? $request->getQueryParams()[$name] : null;
+        }
 
-    public function register(Request $request, Response $response): Response {
-        $email = RequestHelper::param($request, "email");
-        $password = RequestHelper::param($request, "password");
-        $confirmPassword = RequestHelper::param($request, "confirm_password");
+        if($request->getParsedBody()) {
+            return array_key_exists($name, $request->getParsedBody()) ? $request->getParsedBody()[$name] : null;
+        }
 
-        dd($request);
+        return null;
     }
 }

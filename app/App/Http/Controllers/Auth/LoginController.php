@@ -24,6 +24,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Helpers\RequestHelper;
 use App\Http\Controllers\Controller;
 use Psr\Http\Message\RequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -35,6 +36,9 @@ class LoginController extends Controller
     }
 
     public function login(Request $request, Response $response): Response {
+        $email = RequestHelper::param($request, "email");
+        $password = RequestHelper::param($request, "password");
+
         dd($request);
     }
 }
