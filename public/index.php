@@ -22,36 +22,8 @@
  * SOFTWARE.
  */
 
-use App\Extensions\TwigExtension;
-use DI\ContainerBuilder;
-use Psr\Container\ContainerInterface;
-use Slim\App;
-use Slim\Interfaces\RouteParserInterface;
-use Slim\Views\Twig;
-use Twig\Extension\DebugExtension;
+global $slim;
 
-return function (ContainerBuilder $builder)
-{
-    $builder->addDefinitions([
-        "twig" => function(ContainerInterface $container) {
-            $config = $container->get("config");
+require __DIR__ . "/../bootstrap/app.php";
 
-            $twig = Twig::create($config->get("app.view.template_path"), $config->get("app.view.twig"));
-
-            return $twig;
-        },
-
-        "view" => function(ContainerInterface $container) {
-            $twig = $container->get("twig");
-
-            $twig->addExtension(new DebugExtension());
-            $twig->addExtension(new TwigExtension($container));
-
-            return $twig;
-        },
-
-        RouteParserInterface::class => function(ContainerInterface $container) {
-            return $container->get(App::class)->getRouteCollector()->getRouteParser();
-        },
-    ]);
-};
+$slim->run();

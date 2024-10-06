@@ -26,6 +26,7 @@ use DI\Bridge\Slim\Bridge;
 use DI\ContainerBuilder;
 use Dotenv\Dotenv;
 use Noodlehaus\Config;
+use Slim\Views\TwigMiddleware;
 
 session_start();
 
@@ -33,7 +34,7 @@ require __DIR__ . "/../vendor/autoload.php";
 
 const INC_ROOT = __DIR__;
 
-if(file_exists($env = INC_ROOT . "/../.env")) {
+if(file_exists($env = INC_ROOT . "../.env")) {
     $dotenv = Dotenv::createImmutable($env);
     $dotenv->load();
 }
@@ -51,5 +52,11 @@ $container->set("config", function() {
 
 $config = $container->get("config");
 
-$app = Bridge::create($container);
-$app->setBasePath($config->get("app.base_path"));
+$slim = Bridge::create($container);
+$slim->setBasePath($config->get("app.base_path"));
+$slim->addBodyParsingMiddleware();
+$slim->addRoutingMiddleware();
+$slim->add(TwigMiddleware::createFromContainer($slim));
+
+$webRoutes = require INC_ROOT . "/../routes/web.php";
+$webRoutes($slim, $container);

@@ -23,6 +23,7 @@
  */
 return [
     "app" => [
+        "name" => "Slim 4 Authentication",
         "environment" => env("APP_ENV"),
         "url" => env("APP_URL"),
         "auth_id" => env("APP_AUTH_ID"),

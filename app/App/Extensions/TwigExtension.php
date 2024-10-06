@@ -22,36 +22,34 @@
  * SOFTWARE.
  */
 
-use App\Extensions\TwigExtension;
-use DI\ContainerBuilder;
+namespace App\Extensions;
+
 use Psr\Container\ContainerInterface;
-use Slim\App;
-use Slim\Interfaces\RouteParserInterface;
-use Slim\Views\Twig;
-use Twig\Extension\DebugExtension;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
+use function env;
 
-return function (ContainerBuilder $builder)
+class TwigExtension extends AbstractExtension
 {
-    $builder->addDefinitions([
-        "twig" => function(ContainerInterface $container) {
-            $config = $container->get("config");
+    protected $_config;
 
-            $twig = Twig::create($config->get("app.view.template_path"), $config->get("app.view.twig"));
+    public function __construct(ContainerInterface $container) {
+        $this->_config = $container->get("config");
+    }
 
-            return $twig;
-        },
+    public function getFunctions() {
+        return [
+            new TwigFunction("getenv", [$this, "getenv"]),
+            new TwigFunction("config", [$this, "config"]),
+        ];
+    }
 
-        "view" => function(ContainerInterface $container) {
-            $twig = $container->get("twig");
+    public function getenv($key, $default = null) {
+        return env($key, $default);
+    }
 
-            $twig->addExtension(new DebugExtension());
-            $twig->addExtension(new TwigExtension($container));
-
-            return $twig;
-        },
-
-        RouteParserInterface::class => function(ContainerInterface $container) {
-            return $container->get(App::class)->getRouteCollector()->getRouteParser();
-        },
-    ]);
-};
+    public function config($key)
+    {
+        return $this->_config->get($key);
+    }
+}

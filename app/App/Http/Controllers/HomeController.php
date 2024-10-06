@@ -22,36 +22,14 @@
  * SOFTWARE.
  */
 
-use App\Extensions\TwigExtension;
-use DI\ContainerBuilder;
-use Psr\Container\ContainerInterface;
-use Slim\App;
-use Slim\Interfaces\RouteParserInterface;
-use Slim\Views\Twig;
-use Twig\Extension\DebugExtension;
+namespace App\Http\Controllers;
 
-return function (ContainerBuilder $builder)
+use App\Http\Controllers\Controller;
+use Psr\Http\Message\ResponseInterface as Response;
+
+class HomeController extends Controller
 {
-    $builder->addDefinitions([
-        "twig" => function(ContainerInterface $container) {
-            $config = $container->get("config");
-
-            $twig = Twig::create($config->get("app.view.template_path"), $config->get("app.view.twig"));
-
-            return $twig;
-        },
-
-        "view" => function(ContainerInterface $container) {
-            $twig = $container->get("twig");
-
-            $twig->addExtension(new DebugExtension());
-            $twig->addExtension(new TwigExtension($container));
-
-            return $twig;
-        },
-
-        RouteParserInterface::class => function(ContainerInterface $container) {
-            return $container->get(App::class)->getRouteCollector()->getRouteParser();
-        },
-    ]);
-};
+    public function index(Response $response): Response {
+        return $this->render($response, "index");
+    }
+}
