@@ -28,6 +28,9 @@ use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Slim\Interfaces\RouteParserInterface;
 
+/**
+ * @method config(string $string)
+ */
 class Controller
 {
     protected ContainerInterface $_container;

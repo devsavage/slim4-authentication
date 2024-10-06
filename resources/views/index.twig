@@ -2,5 +2,5 @@
 
 {% block content %}
     <a href="{{ url_for("auth.login") }}" class="button">Login</a>
-    <a href="#" class="button">Register</a>
+    <a href="{{ url_for("auth.register") }}" class="button">Register</a>
 {% endblock %}

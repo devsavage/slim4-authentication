@@ -22,21 +22,19 @@
  * SOFTWARE.
  */
 
-use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Controllers\HomeController;
-use Psr\Container\ContainerInterface;
-use Slim\App;
-use Slim\Interfaces\RouteCollectorProxyInterface as Group;
+namespace App\Http\Controllers\Auth;
 
-return function (App $app, ContainerInterface $container) {
-    $app->get("[/]", [HomeController::class, "index"])->setName("home");
+use App\Http\Controllers\Controller;
+use Psr\Http\Message\RequestInterface as Request;
+use Psr\Http\Message\ResponseInterface as Response;
 
-    $app->group("/auth", function (Group $group) {
-        $group->get("/login[/]", [LoginController::class, "index"])->setName("auth.login");
-        $group->post("/login[/]", [LoginController::class, "login"]);
+class RegisterController extends Controller
+{
+    public function index(Response $response): Response {
+        return $this->render($response, "auth/register");
+    }
 
-        $group->get("/register[/]", [RegisterController::class, "index"])->setName("auth.register");
-        $group->post("/register[/]", [RegisterController::class, "register"]);
-    });
-};
+    public function register(Request $request, Response $response): Response {
+        dd($request);
+    }
+}
