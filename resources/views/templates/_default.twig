@@ -4,8 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ config("app.name") }}</title>
+    <style>
+        .button {
+            padding: 1px 6px;
+            border: 1px outset buttonborder;
+            border-radius: 3px;
+            color: buttontext;
+            background-color: buttonface;
+            text-decoration: none;
+        }
+    </style>
 </head>
 <body>
+<h1>{{ config("app.name") }}</h1>
+<hr>
 {% block content %}{% endblock %}
 </body>
 </html>

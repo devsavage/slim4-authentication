@@ -51,4 +51,20 @@ class Controller
     protected function render(Response $response, string $template, array $params = []): Response {
         return $this->_view->render($response, $template . ".twig", $params);
     }
+
+    protected function redirect(Response $response, $route, $urlArgs = [], $urlParams = [], $additionalQuery = null): Response {
+        if($additionalQuery) {
+            return $this->redirectTo($response, $this->buildUrl($this->_router->urlFor($route, $urlArgs, $urlParams) . $additionalQuery));
+        }
+
+        return $this->redirectTo($response, $this->buildUrl($this->_router->urlFor($route, $urlArgs, $urlParams)));
+    }
+
+    protected function redirectTo(Response $response, $to): Response {
+        return $response->withHeader("Location", $to);
+    }
+
+    private function buildUrl($url): string {
+        return $this->config("app.url") . $url;
+    }
 }
