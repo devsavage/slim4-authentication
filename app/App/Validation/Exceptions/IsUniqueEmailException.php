@@ -30,7 +30,7 @@ class IsUniqueEmailException extends ValidationException
 {
     protected $defaultTemplates = [
         self::MODE_DEFAULT => [
-            self::STANDARD => "This {{ name }} is already taken!",
+            self::STANDARD => "This {{name}} is already taken!",
         ]
     ];
 }
