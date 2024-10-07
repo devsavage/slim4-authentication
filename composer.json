@@ -46,6 +46,9 @@
             "php-http/discovery": true
         }
     },
+    "post-root-package-install": [
+        "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+    ],
     "require-dev": {
         "symfony/var-dumper": "^7.1"
     }
