@@ -1,11 +1,11 @@
 
 # Slim 4 Authentication
-An authentication system using Slim 4 (in development)
-
-[![Latest Stable Version](https://poser.pugx.org/devsavage/slim4-authentication/v?format=flat-square)](https://packagist.org/packages/devsavage/slim4-authentication) 
-[![Total Downloads](https://poser.pugx.org/devsavage/slim4-authentication/downloads?format=flat-square)](https://packagist.org/packages/devsavage/slim4-authentication) 
+[![Latest Stable Version](https://poser.pugx.org/devsavage/slim4-authentication/v?format=flat-square)](https://packagist.org/packages/devsavage/slim4-authentication)
+[![Total Downloads](https://poser.pugx.org/devsavage/slim4-authentication/downloads?format=flat-square)](https://packagist.org/packages/devsavage/slim4-authentication)
 [![Latest Unstable Version](https://poser.pugx.org/devsavage/slim4-authentication/v/unstable?format=flat-square)](https://packagist.org/packages/devsavage/slim4-authentication)
 [![License](https://poser.pugx.org/devsavage/slim4-authentication/license?format=flat-square)](https://packagist.org/packages/devsavage/slim4-authentication)
+
+An authentication system using Slim 4 (in development)
 
 ## Getting Started
 ### Prerequisites
