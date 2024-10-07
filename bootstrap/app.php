@@ -62,10 +62,12 @@ $slim = Bridge::create($container);
 $slim->setBasePath($config->get("app.base_path"));
 $slim->addBodyParsingMiddleware();
 $slim->addRoutingMiddleware();
-$slim->add(TwigMiddleware::createFromContainer($slim));
 
 if($envExists) {
     $container->get("database")->bootEloquent();
+    $slim->add(TwigMiddleware::createFromContainer($slim));
+} else {
+    dd("Failed to initialize database connection, check your .env file!");
 }
 
 $webRoutes = require INC_ROOT . "/../routes/web.php";

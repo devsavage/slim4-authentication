@@ -44,11 +44,13 @@
     </style>
 </head>
 <body>
-<h1>{{ config("app.name") }}</h1> <span><a class="button" href="{{ url_for("home") }}">Home</a></span>
-<hr>
-{% include "templates/partials/_alerts.twig" %}
-{% block content %}{% endblock %}
+    <h1>{{ config("app.name") }}</h1>
+    {% include "templates/partials/_nav.twig" %}
+    <hr>
+    {% include "templates/partials/_alerts.twig" %}
 
-{% block scripts %}{% endblock %}
+    {% block content %}{% endblock %}
+
+    {% block scripts %}{% endblock %}
 </body>
 </html>

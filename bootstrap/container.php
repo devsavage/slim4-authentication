@@ -65,6 +65,11 @@ return function (ContainerBuilder $builder)
 
             $twig->getEnvironment()->addGlobal("flash", $container->get("flash"));
 
+            $twig->getEnvironment()->addGlobal("auth", [
+                "check" => $container->get("auth")->check(),
+                "user" => $container->get("auth")->user(),
+            ]);
+
             return $twig;
         },
 

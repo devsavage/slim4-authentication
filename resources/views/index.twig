@@ -1,6 +1,10 @@
 {% extends "templates/_default.twig" %}
 
 {% block content %}
-    <a href="{{ url_for("auth.login") }}" class="button">Login</a>
-    <a href="{{ url_for("auth.register") }}" class="button">Register</a>
+    {% if not auth.check %}
+        <a href="{{ url_for("auth.login") }}" class="button">Login</a>
+        <a href="{{ url_for("auth.register") }}" class="button">Register</a>
+    {% else %}
+        Welcome, {{ auth.user.email }}!
+    {% endif %}
 {% endblock %}
