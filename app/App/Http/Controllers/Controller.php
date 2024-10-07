@@ -24,9 +24,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\RequestHelper;
 use Psr\Container\ContainerInterface;
+use Psr\Http\Message\RequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 use Slim\Interfaces\RouteParserInterface;
+use Slim\Routing\RouteContext;
+use function array_merge;
 use function full_uri;
 
 class Controller
@@ -61,8 +65,12 @@ class Controller
         return $this->flash->addMessage($type, $message);
     }
 
-    protected function render(Response $response, string $template, array $params = []): Response {
-        return $this->_view->render($response, $template . ".twig", $params);
+    protected function render(Request $request, Response $response, string $template, array $params = []): Response {
+        $twigParams = array_merge([
+            "routeName" => RouteContext::fromRequest($request)->getRoute()->getName(),
+        ], $params);
+
+        return $this->_view->render($response, $template . ".twig", $twigParams);
     }
 
     protected function redirect(Response $response, $route, $urlArgs = [], $urlParams = [], $additionalQuery = null): Response {
@@ -71,6 +79,10 @@ class Controller
         }
 
         return $this->redirectTo($response, $this->buildUrl($this->_router->urlFor($route, $urlArgs, $urlParams)));
+    }
+
+    public function requiresCAPTCHA($request): bool {
+        return RequestHelper::routeRequiresCAPTCHA($this->_container, RouteContext::fromRequest($request)->getRoute()->getName());
     }
 
     protected function redirectTo(Response $response, $to): Response {

@@ -27,6 +27,9 @@ return [
         "registration_failed" => "Unable to create your account, please fix any errors and try again.",
         "registration_success" => "Your account has been created!",
         "csrf_failed" => "CSRF verification has failed, your request has been terminated. Please try again.",
+        "login_validation_failed" => "Unable to log into your account, please fix any errors and try again.",
+        "login_failed" => "The credentials you have entered are invalid, please try again.",
+        "login_success" => "Your are now logged in!",
     ]
 ];
 

@@ -28,16 +28,19 @@ use App\Database\User;
 use App\Helpers\RequestHelper;
 use App\Helpers\Session;
 use App\Http\Controllers\Controller;
+use Exception;
 use Psr\Http\Message\RequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 use Respect\Validation\Validator as v;
 use function password_hash;
+use function trigger_error;
+use const E_USER_ERROR;
 use const PASSWORD_DEFAULT;
 
 class RegisterController extends Controller
 {
-    public function index(Response $response): Response {
-        return $this->render($response, "auth/register");
+    public function index(Request $request, Response $response): Response {
+        return $this->render($request, $response, "auth/register");
     }
 
     public function register(Request $request, Response $response): Response {
@@ -45,7 +48,11 @@ class RegisterController extends Controller
         $password = RequestHelper::param($request, "password");
         $turnstileResponse = RequestHelper::param($request, "cf-turnstile-response");
 
-        if($this->config("plugins.turnstile.enabled") &&
+        if($this->config("plugins.turnstile.enabled") && $turnstileResponse == null) {
+            trigger_error("CAPTCHA is enabled but not correctly setup for this route. Add this route into the enabled_routes portion of your config.", E_USER_ERROR);
+        }
+
+        if($this->config("plugins.turnstile.enabled") && $this->requiresCAPTCHA($request) && $turnstileResponse &&
             !$this->turnstile->verify($turnstileResponse, $this->config("plugins.turnstile.cf_secured") ?
                 $request->getServerParams()["HTTP_CF_CONNECTING_IP"] :
                 $request->getServerParams()["REMOTE_ADDR"])->success) {

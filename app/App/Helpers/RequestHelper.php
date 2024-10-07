@@ -24,7 +24,14 @@
 
 namespace App\Helpers;
 
+use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use function array_key_exists;
+use function array_keys;
+use function array_values;
+use function dd;
+use function in_array;
+use function is_array;
 
 class RequestHelper
 {
@@ -39,5 +46,22 @@ class RequestHelper
         }
 
         return null;
+    }
+
+    public static function routeRequiresCAPTCHA(ContainerInterface $container, $route): bool {
+        $config = $container->get("config");
+        $enabled = $config->get("plugins.turnstile.enabled");
+
+        if(!$enabled) {
+            return false;
+        }
+
+        $validRoutes = $config->get("plugins.turnstile.enabled_routes");
+
+        if(!is_array($validRoutes) || count($validRoutes) == 0) {
+            return false;
+        }
+
+        return in_array($route, $validRoutes);
     }
 }

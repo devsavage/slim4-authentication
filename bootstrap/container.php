@@ -71,6 +71,10 @@ return function (ContainerBuilder $builder)
                 "user" => $container->get("auth")->user(),
             ]);
 
+            $routeParser = $container->get(RouteParserInterface::class);
+
+//            $twig->getEnvironment()->addGlobal("route", $twig->get);
+
             return $twig;
         },
 

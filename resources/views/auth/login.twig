@@ -1,6 +1,15 @@
 {% extends "templates/_default.twig" %}
 
 {% block content %}
+    {% if flash.getMessage("errors") %}
+        <p><b>Errors</b></p>
+        <ul class="error-list">
+            {% for key, message in flash.getMessage("errors").0 %}
+                <li class="error-message">{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    
     <form action="{{ url_for("auth.login") }}" method="POST">
 
         <label for="email">E-mail address</label>
@@ -9,8 +18,18 @@
         <label for="password">Password</label>
         <input type="password" name="password" id="password" placeholder="Password">
 
+        {% if config("plugins.turnstile.enabled") and route_requires_captcha(routeName) %}
+            <div class="cf-turnstile" data-sitekey="{{ config("plugins.turnstile.public") }}" data-theme="light"></div>
+        {% endif %}
+
         {{ csrf()|raw }}
 
         <button type="submit">Login</button>
     </form>
+{% endblock %}
+
+{% block scripts %}
+    {% if config("plugins.turnstile.enabled") and route_requires_captcha(routeName) %}
+        <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+    {% endif %}
 {% endblock %}

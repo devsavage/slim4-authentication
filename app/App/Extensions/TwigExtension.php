@@ -24,6 +24,7 @@
 
 namespace App\Extensions;
 
+use App\Helpers\RequestHelper;
 use Psr\Container\ContainerInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
@@ -31,11 +32,14 @@ use function env;
 
 class TwigExtension extends AbstractExtension
 {
-    protected $_config, $_csrf;
+    protected mixed $_config;
+    protected mixed $_csrf;
+    protected ContainerInterface $_container;
 
     public function __construct(ContainerInterface $container) {
         $this->_config = $container->get("config");
         $this->_csrf = $container->get("csrf");
+        $this->_container = $container;
     }
 
     public function getFunctions() {
@@ -43,6 +47,7 @@ class TwigExtension extends AbstractExtension
             new TwigFunction("getenv", [$this, "getenv"]),
             new TwigFunction("config", [$this, "config"]),
             new TwigFunction("csrf", [$this, "csrf"]),
+            new TwigFunction("route_requires_captcha", [$this, "routeRequiresCAPTCHA"]),
         ];
     }
 
@@ -59,5 +64,9 @@ class TwigExtension extends AbstractExtension
             <input type="hidden" name="' . $this->_csrf->getTokenNameKey() . '" value="' . $this->_csrf->getTokenName() . '">
             <input type="hidden" name="' . $this->_csrf->getTokenValueKey() . '" value="' . $this->_csrf->getTokenValue() . '">
         ';
+    }
+
+    public function routeRequiresCAPTCHA($name): bool {
+        return RequestHelper::routeRequiresCAPTCHA($this->_container, $name);
     }
 }

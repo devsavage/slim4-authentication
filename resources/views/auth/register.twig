@@ -19,7 +19,7 @@
         <label for="confirm_password">Confirm Password</label>
         <input type="password" name="confirm_password" id="confirm_password" placeholder="Confirm your password">
 
-        {% if config("plugins.turnstile.enabled") %}
+        {% if config("plugins.turnstile.enabled") and route_requires_captcha(routeName) %}
             <div class="cf-turnstile" data-sitekey="{{ config("plugins.turnstile.public") }}" data-theme="light"></div>
         {% endif %}
 
@@ -30,7 +30,7 @@
 {% endblock %}
 
 {% block scripts %}
-    {% if config("plugins.turnstile.enabled") %}
+    {% if config("plugins.turnstile.enabled") and route_requires_captcha(routeName) %}
         <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
     {% endif %}
 {% endblock %}

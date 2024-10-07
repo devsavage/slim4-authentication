@@ -25,11 +25,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Psr\Http\Message\RequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 
 class HomeController extends Controller
 {
-    public function index(Response $response): Response {
-        return $this->render($response, "index");
+    public function index(Request $request, Response $response): Response {
+        return $this->render($request, $response, "index");
     }
 }

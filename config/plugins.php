@@ -28,7 +28,11 @@ return [
             "enabled" => env("PLUGIN_TURNSTILE_ENABLED"),
             "public" => env("PLUGIN_TURNSTILE_PUBLIC"),
             "secret" => env("PLUGIN_TURNSTILE_SECRET"),
-            "cf_secured" => env("PLUGIN_TURNSTILE_CF_SECURE")
+            "cf_secured" => env("PLUGIN_TURNSTILE_CF_SECURE"),
+            "enabled_routes" => [
+                "auth.register",
+                "auth.login"
+            ]
         ]
     ]
 ];
