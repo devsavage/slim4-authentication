@@ -7,6 +7,8 @@
 
 An authentication system using Slim 4 (in development)
 
+Checkout the [current roadmap](/wiki) for features. 
+
 ## Getting Started
 ### Prerequisites
 You will need the following to get started: 
