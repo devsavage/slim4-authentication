@@ -2,7 +2,7 @@
     "name": "devsavage/slim4-authentication",
     "description": "An authentication system using Slim Framework v4",
     "type": "project",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "license": "MIT",
     "authors": [
         {
@@ -46,7 +46,7 @@
             "php-http/discovery": true
         }
     },
-    "post-create-project-cmd": [
+    "post-install-cmd": [
         "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
     ],
     "require-dev": {
