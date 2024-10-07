@@ -13,11 +13,42 @@
             background-color: buttonface;
             text-decoration: none;
         }
+
+        .alert {
+            margin-bottom: 2em;
+        }
+
+        .alert-error {
+            color: red;
+        }
+
+        .alert-success {
+            color: green;
+        }
+
+        .alert-warning {
+            color: darkorange;
+        }
+
+        .alert-info {
+            color: mediumaquamarine;
+        }
+
+        .error-list {
+            margin-bottom: 2em;
+        }
+
+        .error-message {
+            color: darkred;
+        }
     </style>
 </head>
 <body>
 <h1>{{ config("app.name") }}</h1> <span><a class="button" href="{{ url_for("home") }}">Home</a></span>
 <hr>
+{% include "templates/partials/_alerts.twig" %}
 {% block content %}{% endblock %}
+
+{% block scripts %}{% endblock %}
 </body>
 </html>

@@ -26,6 +26,7 @@ use DI\Bridge\Slim\Bridge;
 use DI\ContainerBuilder;
 use Dotenv\Dotenv;
 use Noodlehaus\Config;
+use Respect\Validation\Factory;
 use Slim\Views\TwigMiddleware;
 
 session_start();
@@ -34,10 +35,15 @@ require __DIR__ . "/../vendor/autoload.php";
 
 const INC_ROOT = __DIR__;
 
-if(file_exists($env = INC_ROOT . "../.env")) {
-    $dotenv = Dotenv::createImmutable($env);
+if($envExists = file_exists(INC_ROOT . "/../.env")) {
+    $dotenv = Dotenv::createImmutable(INC_ROOT . "/../");
     $dotenv->load();
 }
+
+Factory::setDefaultInstance((new Factory())
+    ->withRuleNamespace("App\\Validation\\Rules")
+    ->withExceptionNamespace("App\\Validation\\Exceptions")
+);
 
 $builder = new ContainerBuilder();
 
@@ -57,6 +63,10 @@ $slim->setBasePath($config->get("app.base_path"));
 $slim->addBodyParsingMiddleware();
 $slim->addRoutingMiddleware();
 $slim->add(TwigMiddleware::createFromContainer($slim));
+
+if($envExists) {
+    $container->get("database")->bootEloquent();
+}
 
 $webRoutes = require INC_ROOT . "/../routes/web.php";
 $webRoutes($slim, $container);

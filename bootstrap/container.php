@@ -22,17 +22,29 @@
  * SOFTWARE.
  */
 
+use App\Auth\Auth;
 use App\Extensions\TwigExtension;
+use App\Validation\Validator;
 use DI\ContainerBuilder;
+use GuzzleHttp\Client as GuzzleHttpClient;
+use GuzzleHttp\Psr7\HttpFactory;
+use Illuminate\Database\Capsule\Manager;
 use Psr\Container\ContainerInterface;
 use Slim\App;
+use Slim\Flash\Messages;
 use Slim\Interfaces\RouteParserInterface;
 use Slim\Views\Twig;
+use Turnstile\Client\Client;
+use Turnstile\Turnstile;
 use Twig\Extension\DebugExtension;
 
 return function (ContainerBuilder $builder)
 {
     $builder->addDefinitions([
+        RouteParserInterface::class => function(ContainerInterface $container) {
+            return $container->get(App::class)->getRouteCollector()->getRouteParser();
+        },
+
         "twig" => function(ContainerInterface $container) {
             $config = $container->get("config");
 
@@ -41,17 +53,52 @@ return function (ContainerBuilder $builder)
             return $twig;
         },
 
+        "auth" => function(ContainerInterface $container) {
+            return new Auth();
+        },
+
         "view" => function(ContainerInterface $container) {
             $twig = $container->get("twig");
 
             $twig->addExtension(new DebugExtension());
             $twig->addExtension(new TwigExtension($container));
 
+            $twig->getEnvironment()->addGlobal("flash", $container->get("flash"));
+
             return $twig;
         },
 
-        RouteParserInterface::class => function(ContainerInterface $container) {
-            return $container->get(App::class)->getRouteCollector()->getRouteParser();
+        "database" => function(ContainerInterface $container) {
+            $config = $container->get("config");
+
+            $capsule = new Manager();
+            $capsule->addConnection($config->get("database"));
+
+            $capsule->setAsGlobal();
+
+            return $capsule;
         },
+
+        "guzzle" => function(ContainerInterface $container) {
+            return new GuzzleHttpClient();
+        },
+
+        "turnstile_client" => function(ContainerInterface $container) {
+            return new Client($container->get("guzzle"), new HttpFactory());
+        },
+
+        "turnstile" => function(ContainerInterface $container) {
+            $config = $container->get("config");
+
+            return new Turnstile(client: $container->get("turnstile_client"), secretKey: $config->get("plugins.turnstile.secret"));
+        },
+
+        "validator" => function(ContainerInterface $container) {
+            return new Validator();
+        },
+
+        "flash" => function(ContainerInterface $container) {
+            return new Messages();
+        }
     ]);
 };

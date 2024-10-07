@@ -28,9 +28,6 @@ use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Slim\Interfaces\RouteParserInterface;
 
-/**
- * @method config(string $string)
- */
 class Controller
 {
     protected ContainerInterface $_container;
@@ -49,6 +46,18 @@ class Controller
         }
 
         return null;
+    }
+
+    public function config($key) {
+        return $this->config->get($key);
+    }
+
+    protected function flash($type, $message, $forNow = false) {
+        if($forNow) {
+            return $this->flash->addMessageNow($type, $message);
+        }
+
+        return $this->flash->addMessage($type, $message);
     }
 
     protected function render(Response $response, string $template, array $params = []): Response {
