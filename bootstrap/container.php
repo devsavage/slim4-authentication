@@ -48,9 +48,7 @@ return function (ContainerBuilder $builder)
         "twig" => function(ContainerInterface $container) {
             $config = $container->get("config");
 
-            $twig = Twig::create($config->get("app.view.template_path"), $config->get("app.view.twig"));
-
-            return $twig;
+            return Twig::create($config->get("app.view.template_path"), $config->get("app.view.twig"));
         },
 
         "auth" => function(ContainerInterface $container) {

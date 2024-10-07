@@ -22,28 +22,22 @@
  * SOFTWARE.
  */
 
-use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Controllers\HomeController;
-use App\Http\Middleware\GuestMiddleware;
-use Psr\Container\ContainerInterface;
-use Slim\App;
-use Slim\Interfaces\RouteCollectorProxyInterface as Group;
+namespace App\Http\Middleware;
 
-return function (App $app, ContainerInterface $container) {
-    $app->get("[/]", [HomeController::class, "index"])->setName("home");
+use App\Helpers\RequestHelper;
+use App\Http\Middleware\Middleware;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
+use Slim\Psr7\Response;
 
-    $app->group("/auth", function (Group $group) use ($container) {
-        $group->get("/login[/]", [LoginController::class, "index"])
-            ->addMiddleware(new GuestMiddleware($container))
-            ->setName("auth.login");
-        $group->post("/login[/]", [LoginController::class, "login"])
-            ->addMiddleware(new GuestMiddleware($container));
+class GuestMiddleware extends Middleware
+{
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
+        if($this->auth->check()) {
+            return $this->redirect((new Response()), "home");
+        }
 
-        $group->get("/register[/]", [RegisterController::class, "index"])
-            ->addMiddleware(new GuestMiddleware($container))
-            ->setName("auth.register");
-        $group->post("/register[/]", [RegisterController::class, "register"])
-            ->addMiddleware(new GuestMiddleware($container));
-    });
-};
+        return $handler->handle($request);
+    }
+}

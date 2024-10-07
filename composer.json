@@ -38,7 +38,8 @@
         "mailgun/mailgun-php": "^4.3",
         "hassankhan/config": "^3.1",
         "php-di/slim-bridge": "^3.4",
-        "monolog/monolog": "^3.7"
+        "monolog/monolog": "^3.7",
+        "slim/psr7": "^1.7"
     },
     "config": {
         "allow-plugins": {
