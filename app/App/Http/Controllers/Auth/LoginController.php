@@ -48,16 +48,15 @@ class LoginController extends Controller
         $password = RequestHelper::param($request, "password");
         $turnstileResponse = RequestHelper::param($request, "cf-turnstile-response");
 
-        if($this->config("plugins.turnstile.enabled") && $turnstileResponse == null) {
-            trigger_error("CAPTCHA is enabled but not correctly setup for this route. Add this route into the enabled_routes portion of your config.", E_USER_ERROR);
-        }
+        if($this->config("plugins.turnstile.enabled") && $this->requiresCAPTCHA($request)) {
+            if($turnstileResponse == null) {
+                trigger_error("CAPTCHA is enabled on this route but not correctly setup on the view.", E_USER_ERROR);
+            }
 
-        if($this->config("plugins.turnstile.enabled") && $this->requiresCAPTCHA($request) && $turnstileResponse &&
-            !$this->turnstile->verify($turnstileResponse, $this->config("plugins.turnstile.cf_secured") ?
-                $request->getServerParams()["HTTP_CF_CONNECTING_IP"] :
-                $request->getServerParams()["REMOTE_ADDR"])->success) {
-            $this->flash("error", $this->config("lang.captcha_failed"));
-            return $this->redirect($response, "auth.login");
+            if(!$this->turnstile->verify($turnstileResponse, $this->config("plugins.turnstile.cf_secured") ? $request->getServerParams()["HTTP_CF_CONNECTING_IP"] : $request->getServerParams()["REMOTE_ADDR"])->success) {
+                $this->flash("error", $this->config("lang.captcha_failed"));
+                return $this->redirect($response, "auth.login");
+            }
         }
 
         $validation = $this->validator->validate($request, [

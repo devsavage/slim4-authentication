@@ -22,18 +22,22 @@
  * SOFTWARE.
  */
 
+use App\Auth\Auth;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\HomeController;
+use App\Http\Middleware\AuthMiddleware;
 use App\Http\Middleware\GuestMiddleware;
 use Psr\Container\ContainerInterface;
+use Psr\Http\Message\ResponseInterface as Response;
 use Slim\App;
 use Slim\Interfaces\RouteCollectorProxyInterface as Group;
+use Slim\Interfaces\RouteParserInterface;
 
 return function (App $app, ContainerInterface $container) {
     $app->get("[/]", [HomeController::class, "index"])->setName("home");
 
-    $app->group("/auth", function (Group $group) use ($container) {
+    $app->group("/auth", function (Group $group) use ($app, $container) {
         $group->get("/login[/]", [LoginController::class, "index"])
             ->addMiddleware(new GuestMiddleware($container))
             ->setName("auth.login");
@@ -47,5 +51,12 @@ return function (App $app, ContainerInterface $container) {
         $group->post("/register[/]", [RegisterController::class, "register"])
             ->addMiddleware(new GuestMiddleware($container))
             ->setName("auth.register");
+
+        $group->get("/logout[/]", function(Response $response) use ($app, $container) {
+            Auth::deauth();
+
+            $container->get("flash")->addMessage("success", $container->get("config")->get("lang.logout_success"));
+            return $response->withHeader("Location", $container->get(RouteParserInterface::class)->urlFor("home"));
+        })->addMiddleware(new AuthMiddleware($container))->setName("auth.logout");
     });
 };

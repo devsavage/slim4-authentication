@@ -1,4 +1,4 @@
 <a class="button" href="{{ url_for("home") }}">Home</a>
 {% if auth.check %}
-    <a class="button" href="{{ url_for("home") }}">Logout</a>
+    <a class="button" href="{{ url_for("auth.logout") }}">Logout</a>
 {% endif %}

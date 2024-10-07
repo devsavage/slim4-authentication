@@ -21,17 +21,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-return [
-    "lang" => [
-        "captcha_failed" => "CAPTCHA failed to validate you, please try again!",
-        "registration_failed" => "Unable to create your account, please fix any errors and try again.",
-        "registration_success" => "Your account has been created!",
-        "csrf_failed" => "CSRF verification has failed, your request has been terminated. Please try again.",
-        "login_validation_failed" => "Unable to log into your account, please fix any errors and try again.",
-        "login_failed" => "The credentials you have entered are invalid, please try again.",
-        "login_success" => "You are now logged in!",
-        "logout_success" => "You have been logged out!",
-        "auth_required" => "You must be logged in to view that page!",
-    ]
-];
 
+namespace App\Http\Middleware;
+
+use App\Http\Middleware\Middleware;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
+use Slim\Psr7\Response;
+
+class AuthMiddleware extends Middleware
+{
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
+        if(!$this->getContainer()->get("auth")->check()) {
+            $this->flash("warning", $this->config("lang.auth_required"));
+            return $this->redirect((new Response()), "auth.login");
+        }
+
+        return $handler->handle($request);
+    }
+}
