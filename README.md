@@ -26,7 +26,13 @@ $ cd your-project-name && composer install
 ```bash
 $ npm install
 ```
-View the wiki for finishing setup and additional information on how to use this project.
+#### Publish database migrations
+Update your .env file's database details and run the command below to create the necessary tables
+```bash
+$ php ./vendor/bin/phinx migrate
+```
+#### Continued configuration
+View the wiki for tips on finishing additional setup and view additional information on how to use this project.
 
 ## Vulnerabilities
 Please report any vulnerabilities using the information found at: [https://savagedev.io/security.txt](https://savagedev.io/security.txt)
