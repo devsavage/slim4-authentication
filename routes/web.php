@@ -38,12 +38,14 @@ return function (App $app, ContainerInterface $container) {
             ->addMiddleware(new GuestMiddleware($container))
             ->setName("auth.login");
         $group->post("/login[/]", [LoginController::class, "login"])
-            ->addMiddleware(new GuestMiddleware($container));
+            ->addMiddleware(new GuestMiddleware($container))
+            ->setName("auth.login");
 
         $group->get("/register[/]", [RegisterController::class, "index"])
             ->addMiddleware(new GuestMiddleware($container))
             ->setName("auth.register");
         $group->post("/register[/]", [RegisterController::class, "register"])
-            ->addMiddleware(new GuestMiddleware($container));
+            ->addMiddleware(new GuestMiddleware($container))
+            ->setName("auth.register");
     });
 };

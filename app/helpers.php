@@ -21,10 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+
 if(!function_exists("env"))
 {
-    function env($key, $default = null)
-    {
+    function env($key, $default = null) {
         if(array_key_exists($key, $_ENV)) {
             return $_ENV[$key];
         }
@@ -34,11 +34,16 @@ if(!function_exists("env"))
 }
 
 if (!function_exists("dd")) {
-    function dd()
-    {
+    function dd(): void {
         array_map(function($x) {
             dump($x);
         }, func_get_args());
         die;
+    }
+}
+
+if(!function_exists("full_uri")) {
+    function full_uri($path): string {
+        return env("APP_URL") . $path;
     }
 }

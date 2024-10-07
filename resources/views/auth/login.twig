@@ -2,10 +2,15 @@
 
 {% block content %}
     <form action="{{ url_for("auth.login") }}" method="POST">
+
         <label for="email">E-mail address</label>
         <input type="text" name="email" id="email" placeholder="E-mail address">
+
         <label for="password">Password</label>
         <input type="password" name="password" id="password" placeholder="Password">
+
+        {{ csrf()|raw }}
+
         <button type="submit">Login</button>
     </form>
 {% endblock %}

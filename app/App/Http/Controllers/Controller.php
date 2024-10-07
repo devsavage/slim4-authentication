@@ -27,6 +27,7 @@ namespace App\Http\Controllers;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Slim\Interfaces\RouteParserInterface;
+use function full_uri;
 
 class Controller
 {
@@ -77,6 +78,6 @@ class Controller
     }
 
     private function buildUrl($url): string {
-        return $this->config("app.url") . $url;
+        return full_uri($url);
     }
 }

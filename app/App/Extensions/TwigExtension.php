@@ -31,16 +31,18 @@ use function env;
 
 class TwigExtension extends AbstractExtension
 {
-    protected $_config;
+    protected $_config, $_csrf;
 
     public function __construct(ContainerInterface $container) {
         $this->_config = $container->get("config");
+        $this->_csrf = $container->get("csrf");
     }
 
     public function getFunctions() {
         return [
             new TwigFunction("getenv", [$this, "getenv"]),
             new TwigFunction("config", [$this, "config"]),
+            new TwigFunction("csrf", [$this, "csrf"]),
         ];
     }
 
@@ -48,8 +50,14 @@ class TwigExtension extends AbstractExtension
         return env($key, $default);
     }
 
-    public function config($key)
-    {
+    public function config($key) {
         return $this->_config->get($key);
+    }
+
+    public function csrf(): string {
+        return '
+            <input type="hidden" name="' . $this->_csrf->getTokenNameKey() . '" value="' . $this->_csrf->getTokenName() . '">
+            <input type="hidden" name="' . $this->_csrf->getTokenValueKey() . '" value="' . $this->_csrf->getTokenValue() . '">
+        ';
     }
 }

@@ -30,9 +30,12 @@ use GuzzleHttp\Client as GuzzleHttpClient;
 use GuzzleHttp\Psr7\HttpFactory;
 use Illuminate\Database\Capsule\Manager;
 use Psr\Container\ContainerInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Slim\App;
+use Slim\Csrf\Guard;
 use Slim\Flash\Messages;
 use Slim\Interfaces\RouteParserInterface;
+use Slim\Routing\RouteContext;
 use Slim\Views\Twig;
 use Turnstile\Client\Client;
 use Turnstile\Turnstile;
@@ -102,6 +105,25 @@ return function (ContainerBuilder $builder)
 
         "flash" => function(ContainerInterface $container) {
             return new Messages();
-        }
+        },
+
+        "csrf" => function(ContainerInterface $container) {
+            $config = $container->get("config");
+            $flash = $container->get("flash");
+            $responseFactory = $container->get(App::class)->getResponseFactory();
+            $guard = new Guard($responseFactory);
+
+            $guard->setFailureHandler(function (ServerRequestInterface $request) use ($responseFactory, $container, $config, $flash) {
+                $flash->addMessage("error", $config->get("lang.csrf_failed"));
+
+                $response = $responseFactory->createResponse();
+                $routeContext = RouteContext::fromRequest($request);
+                $route = $routeContext->getRoute();
+
+                return $response->withHeader("Location", full_uri($routeContext->getRouteParser()->urlFor($route->getName())));
+            });
+
+            return $guard;
+        },
     ]);
 };

@@ -60,6 +60,9 @@ $config = $container->get("config");
 
 $slim = Bridge::create($container);
 $slim->setBasePath($config->get("app.base_path"));
+
+$slim->add($container->get("csrf"));
+
 $slim->addBodyParsingMiddleware();
 $slim->addRoutingMiddleware();
 

@@ -26,6 +26,7 @@ return [
         "captcha_failed" => "CAPTCHA failed to validate you, please try again!",
         "registration_failed" => "Unable to create your account, please fix any errors and try again.",
         "registration_success" => "Your account has been created!",
+        "csrf_failed" => "CSRF verification has failed, your request has been terminated. Please try again.",
     ]
 ];
 

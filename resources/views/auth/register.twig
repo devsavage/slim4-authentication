@@ -23,6 +23,8 @@
             <div class="cf-turnstile" data-sitekey="{{ config("plugins.turnstile.public") }}" data-theme="light"></div>
         {% endif %}
 
+        {{ csrf()|raw }}
+
         <button type="submit">Register</button>
     </form>
 {% endblock %}
