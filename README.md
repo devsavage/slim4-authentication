@@ -7,7 +7,7 @@
 
 An authentication system using Slim 4 (in development)
 
-Checkout the [current roadmap](/wiki) for features. 
+Checkout the [current roadmap](https://github.com/devsavage/slim4-authentication/wiki) for features. 
 
 ## Getting Started
 ### Prerequisites
