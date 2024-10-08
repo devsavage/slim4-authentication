@@ -25,9 +25,12 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Database\User;
+use App\Helpers\Cookie;
+use App\Helpers\Hash;
 use App\Helpers\RequestHelper;
 use App\Helpers\Session;
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use Exception;
 use Psr\Http\Message\RequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -46,6 +49,7 @@ class LoginController extends Controller
     public function login(Request $request, Response $response): Response {
         $email = RequestHelper::param($request, "email");
         $password = RequestHelper::param($request, "password");
+        $remember = RequestHelper::param($request, "remember");
         $turnstileResponse = RequestHelper::param($request, "cf-turnstile-response");
 
         if($this->config("plugins.turnstile.enabled") && $this->requiresCAPTCHA($request)) {
@@ -76,6 +80,17 @@ class LoginController extends Controller
             $this->flash("error", $this->config("lang.login_failed"));
             $this->flash("errors", Session::get("errors"));
             return $this->redirect($response, "auth.login");
+        }
+
+        if($remember === "on") {
+            $rememberIdentifier = Hash::random(128);
+            $rememberToken = Hash::random(128);
+
+            $hashedToken = Hash::encryptString($rememberToken);
+
+            $user->updateRememberCredentials($rememberIdentifier, $hashedToken);
+
+            Cookie::set($this->config("app.remember_id"), "{$rememberIdentifier}.{$rememberToken}", Carbon::now()->addWeeks(2)->timestamp);
         }
 
         Session::set($this->config("app.auth_id"), $user->id);

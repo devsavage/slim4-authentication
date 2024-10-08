@@ -2,7 +2,7 @@
     "name": "devsavage/slim4-authentication",
     "description": "An authentication system using Slim Framework v4",
     "type": "project",
-    "version": "0.0.4",
+    "version": "0.1.0",
     "license": "MIT",
     "authors": [
         {

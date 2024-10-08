@@ -31,7 +31,7 @@ return [
             "cf_secured" => env("PLUGIN_TURNSTILE_CF_SECURE"),
             "enabled_routes" => [
                 "auth.register",
-                "auth.login"
+//                "auth.login"
             ]
         ]
     ]

@@ -32,6 +32,7 @@ return [
         "login_success" => "You are now logged in!",
         "logout_success" => "You have been logged out!",
         "auth_required" => "You must be logged in to view that page!",
+        "remember_me" => "Keep me signed in for two weeks"
     ]
 ];
 

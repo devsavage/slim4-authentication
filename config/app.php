@@ -27,6 +27,7 @@ return [
         "environment" => env("APP_ENV"),
         "url" => env("APP_URL"),
         "auth_id" => env("APP_AUTH_ID"),
+        "remember_id" => env("APP_REMEMBER_ID"),
         "base_path" => "",
         "debug" => env("APP_ENV") === "development",
         "view" => [

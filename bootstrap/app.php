@@ -22,6 +22,7 @@
  * SOFTWARE.
  */
 
+use App\Http\Middleware\RememberMiddleware;
 use DI\Bridge\Slim\Bridge;
 use DI\ContainerBuilder;
 use Dotenv\Dotenv;
@@ -62,6 +63,8 @@ $slim = Bridge::create($container);
 $slim->setBasePath($config->get("app.base_path"));
 
 $slim->add($container->get("csrf"));
+
+$slim->addMiddleware(new RememberMiddleware($container));
 
 $slim->addBodyParsingMiddleware();
 $slim->addRoutingMiddleware();

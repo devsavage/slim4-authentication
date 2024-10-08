@@ -49,4 +49,15 @@ class User extends Model
         "remember_token",
         "verify_token",
     ];
+
+    public function updateRememberCredentials($identifier, $token): void {
+        $this->update([
+            "remember_identifier" => $identifier,
+            "remember_token" => $token,
+        ]);
+    }
+
+    public function removeRememberCredentials(): void {
+        $this->updateRememberCredentials(null, null);
+    }
 }

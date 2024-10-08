@@ -22,32 +22,45 @@
  * SOFTWARE.
  */
 
-namespace App\Auth;
+namespace App\Helpers;
 
-use App\Database\User;
-use App\Helpers\Cookie;
-use App\Helpers\Session;
-use function env;
-
-class Auth extends User
+class Cookie
 {
-    public function user() {
-        return $this->userById(Session::get(env("APP_AUTH_ID")));
+    public static function exists($name): bool {
+        return isset($_COOKIE[$name]);
     }
 
-    public function userById($id) {
-        return User::find($id);
-    }
-
-    public function check(): bool {
-        return Session::exists(env("APP_AUTH_ID"));
-    }
-
-    public static function deauth() {
-        Session::destroy(env("APP_AUTH_ID"));
-
-        if(Cookie::exists(env("APP_REMEMBER_ID"))) {
-            Cookie::destroy(env("APP_REMEMBER_ID"));
+    public static function get($key, $default = null) {
+        if(self::exists($key)) {
+            return $_COOKIE[$key];
         }
+
+        return $default;
+    }
+
+    public static function set($name, $value, $expiry, $secure = false, $httpOnly = true, $domain = null, $samesite = "Lax"): bool {
+        if(setcookie($name, $value, [
+            "expires" => $expiry,
+            "path" => "/",
+            "domain" => $domain,
+            "secure" => $secure,
+            "httponly" => $httpOnly,
+            "samesite" => $samesite
+        ])) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public static function destroy($name, $subdomain = false): void {
+        if(!self::exists($name)) return;
+
+        if($subdomain) {
+            self::set($name, '', time() - 1, false, true, $subdomain);
+            return;
+        }
+
+        self::set($name, '', time() - 1);
     }
 }
