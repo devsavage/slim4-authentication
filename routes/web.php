@@ -23,6 +23,7 @@
  */
 
 use App\Auth\Auth;
+use App\Http\Controllers\Auth\Account\AccountController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\HomeController;
@@ -51,6 +52,13 @@ return function (App $app, ContainerInterface $container) {
         $group->post("/register[/]", [RegisterController::class, "register"])
             ->addMiddleware(new GuestMiddleware($container))
             ->setName("auth.register");
+
+        $group->get("/account[/]", [AccountController::class, "index"])
+            ->addMiddleware(new AuthMiddleware($container))
+            ->setName("auth.account");
+        $group->post("/account[/]", [AccountController::class, "update"])
+            ->addMiddleware(new AuthMiddleware($container))
+            ->setName("auth.account");
 
         $group->get("/logout[/]", function(Response $response) use ($app, $container) {
             Auth::deauth();
