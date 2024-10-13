@@ -1,0 +1,14 @@
+{% extends "templates/_default.twig" %}
+
+{% block content %}
+    {% if flash.getMessage("errors") %}
+        <p><b>Errors</b></p>
+        <ul class="error-list">
+            {% for key, message in flash.getMessage("errors").0 %}
+                <li class="error-message">{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+
+{% endblock %}

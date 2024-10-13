@@ -1,5 +1,7 @@
 {% extends "templates/_default.twig" %}
 
+{% set pagename = "Register" %}
+
 {% block content %}
     {% if flash.getMessage("errors") %}
         <p><b>Errors</b></p>
