@@ -35,6 +35,8 @@ return [
         "remember_me" => "Keep me signed in for two weeks",
         "update_profile_validation_failed" => "Unable to update your profile, please fix any errors and try again.",
         "update_profile_success" => "Your profile has been updated successfully!",
+        "update_password_validation_failed" => "Unable to update your password, please fix any errors and try again.",
+        "update_password_success" => "Your password has been updated successfully!",
     ]
 ];
 
