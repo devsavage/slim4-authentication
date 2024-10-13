@@ -17,7 +17,7 @@
     <form action="{{ url_for("auth.account") }}" method="POST">
 
         <label for="email">E-mail address</label>
-        <input type="text" name="email" id="email" value="{{ auth.user.email }}" placeholder="Enter a new e-mail address">
+        <input type="text" name="email" id="email" value="{{ old.email ?? auth.user.email }}" placeholder="Enter a new e-mail address">
 
         {{ csrf()|raw }}
 
