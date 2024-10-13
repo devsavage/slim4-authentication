@@ -24,6 +24,7 @@
 
 use App\Auth\Auth;
 use App\Http\Controllers\Auth\Account\AccountController;
+use App\Http\Controllers\Auth\Account\Password\PasswordController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\HomeController;
@@ -59,6 +60,13 @@ return function (App $app, ContainerInterface $container) {
         $group->post("/account[/]", [AccountController::class, "update"])
             ->addMiddleware(new AuthMiddleware($container))
             ->setName("auth.account");
+
+        $group->get("/account/password/update[/]", [PasswordController::class, "update"])
+            ->addMiddleware(new AuthMiddleware($container))
+            ->setName("auth.account.password.update");
+        $group->post("/account/password/update[/]", [PasswordController::class, "postUpdate"])
+            ->addMiddleware(new AuthMiddleware($container))
+            ->setName("auth.account.password.update");
 
         $group->get("/logout[/]", function(Response $response) use ($app, $container) {
             Auth::deauth();

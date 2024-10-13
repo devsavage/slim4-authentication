@@ -1,0 +1,35 @@
+{% extends "templates/_default.twig" %}
+
+{% set pagename = "Account" %}
+
+{% block content %}
+    {% if flash.getMessage("errors") %}
+        <p><b>Errors</b></p>
+        <ul class="error-list">
+            {% for key, message in flash.getMessage("errors").0 %}
+                <li class="error-message">{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <h4>Update your password below.</h4>
+
+    <form action="{{ url_for("auth.account.password.update") }}" method="POST">
+
+        <label for="password">Current Password</label>
+        <input type="password" name="password" id="password" placeholder="Enter your current password">
+
+        <label for="password">New Password</label>
+        <input type="password" name="new_password" id="new_password" placeholder="Enter your new password">
+
+        <label for="password">Confirm New Password</label>
+        <input type="password" name="confirm_new_password" id="confirm_new_password" placeholder="Enter your new password again">
+
+        {{ csrf()|raw }}
+
+        <br>
+        <br>
+
+        <button type="submit">Save</button>
+    </form>
+{% endblock %}
