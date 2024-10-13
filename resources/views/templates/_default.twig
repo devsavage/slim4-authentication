@@ -47,6 +47,7 @@
     <h1>{{ config("app.name") }}</h1>
     {% include "templates/partials/_nav.twig" %}
     <hr>
+    <h1>{{ pagename }}</h1>
     {% include "templates/partials/_alerts.twig" %}
 
     {% block content %}{% endblock %}
