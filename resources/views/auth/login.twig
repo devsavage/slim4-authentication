@@ -26,7 +26,8 @@
 
         {{ csrf()|raw }}
 
-        <p>Don't have an account? <a href="{{ url_for("auth.register") }}">Register for one</a></p>
+        <br>
+        <br>
 
         <input type="checkbox" id="remember" name="remember">
         <label for="remember">{{ config("lang.remember_me") }}</label>
@@ -36,6 +37,8 @@
 
         <button type="submit">Login</button>
     </form>
+
+    <p>Don't have an account? <a href="{{ url_for("auth.register") }}">Register for one</a></p>
 {% endblock %}
 
 {% block scripts %}
