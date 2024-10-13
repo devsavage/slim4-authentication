@@ -22,6 +22,7 @@
  * SOFTWARE.
  */
 
+use App\Http\Middleware\OldInputMiddleware;
 use App\Http\Middleware\RememberMiddleware;
 use DI\Bridge\Slim\Bridge;
 use DI\ContainerBuilder;
@@ -62,8 +63,7 @@ $config = $container->get("config");
 $slim = Bridge::create($container);
 $slim->setBasePath($config->get("app.base_path"));
 
-$slim->add($container->get("csrf"));
-
+$slim->addMiddleware($container->get("csrf"));
 $slim->addMiddleware(new RememberMiddleware($container));
 
 $slim->addBodyParsingMiddleware();
@@ -71,7 +71,8 @@ $slim->addRoutingMiddleware();
 
 if($envExists) {
     $container->get("database")->bootEloquent();
-    $slim->add(TwigMiddleware::createFromContainer($slim));
+    $slim->addMiddleware(TwigMiddleware::createFromContainer($slim));
+    $slim->addMiddleware(new OldInputMiddleware($container));
 } else {
     dd("Failed to initialize database connection, check your .env file!");
 }

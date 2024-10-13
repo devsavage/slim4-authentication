@@ -25,6 +25,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\RequestHelper;
+use App\Helpers\Session;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\RequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -69,6 +70,8 @@ class Controller
         $twigParams = array_merge([
             "routeName" => RouteContext::fromRequest($request)->getRoute()->getName(),
         ], $params);
+
+        Session::destroy("old");
 
         return $this->_view->render($response, $template . ".twig", $twigParams);
     }
