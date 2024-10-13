@@ -3,5 +3,6 @@
     <a href="{{ url_for("auth.login") }}" class="button">Login</a>
     <a href="{{ url_for("auth.register") }}" class="button">Register</a>
 {% else %}
+    <a class="button" href="{{ url_for("auth.account") }}">Account</a>
     <a class="button" href="{{ url_for("auth.logout") }}">Logout</a>
 {% endif %}

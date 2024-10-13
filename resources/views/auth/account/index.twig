@@ -1,5 +1,7 @@
 {% extends "templates/_default.twig" %}
 
+{% set pagename = "Account" %}
+
 {% block content %}
     {% if flash.getMessage("errors") %}
         <p><b>Errors</b></p>
@@ -10,5 +12,23 @@
         </ul>
     {% endif %}
 
+    <h4>Update your account details below.</h4>
 
+    <form action="{{ url_for("auth.account") }}" method="POST">
+
+        <label for="email">E-mail address</label>
+        <input type="text" name="email" id="email" value="{{ auth.user.email }}" placeholder="Enter a new e-mail address">
+
+        {{ csrf()|raw }}
+
+        <br>
+        <br>
+
+        <button type="submit">Save Changes</button>
+    </form>
+
+    <br>
+    <br>
+
+    <a class="button" href="{{ url_for("auth.account") }}">Update Password</a>
 {% endblock %}
