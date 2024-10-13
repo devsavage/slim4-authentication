@@ -27,10 +27,10 @@
 
         {{ csrf()|raw }}
 
-        <p>Already have an account? <a href="{{ url_for("auth.login") }}">Login</a></p>
-
         <button type="submit">Register</button>
     </form>
+
+    <p>Already have an account? <a href="{{ url_for("auth.login") }}">Login</a></p>
 {% endblock %}
 
 {% block scripts %}
